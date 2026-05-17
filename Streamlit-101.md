@@ -445,3 +445,54 @@ else:
 2. **Mudah Diuji**: Setiap fungsi bisa diuji secara independen.
 3. **Kode Bersih**: File utama (`app.py`) menjadi sangat ringkas dan mudah dibaca.
 4. **Dapat Digunakan Kembali**: Komponen di `components/` bisa dipakai ulang di proyek lain.
+
+## Menghubungkan riwayat perhitungan ke Google Sheets
+
+Menghubungkan aplikasi kita ke Google Sheets memungkinkan kita menyimpan data secara permanen layaknya memiliki database sendiri. Saya akan memandu kamu langkah demi langkah melalui proses ini dan akan memberikan pertanyaan di setiap tahapnya.
+
+Kita akan menggunakan library st-gsheets-connection yang dirancang khusus agar Streamlit bisa berinteraksi dengan Google Sheets dengan sangat mudah.
+
+| Komponen             | Fungsi                                                                 |
+| :------------------- | :--------------------------------------------------------------------- |
+| Google Sheet         | Tempat penyimpanan data riwayat (Nama, BMI, Tanggal)                   |
+| Google Cloud Console | Tempat kita membuat ""kunci"" (API Key) agar aplikasi punya izin akses |
+| Secrets (.toml)      | File khusus di proyek kita untuk menyimpan kunci akses dengan aman     |
+
+### Langkah-langkah untuk memulai integrasi
+
+- Persiapan Google Cloud & Sheet: Cara mendapatkan kunci akses dan menyiapkan lembar kerja di Google Drive.
+- Setup Library & Konfigurasi: Menginstal alat yang dibutuhkan dan mengatur cara Streamlit "berbicara" dengan Google.
+- Logika Pengiriman Data: Menulis kode Python untuk menambahkan baris baru ke dalam sheet secara otomatis setiap kali tombol diklik.
+
+Langkah pertama ini adalah bagian yang paling krusial karena kita akan membangun "jembatan" agar Streamlit punya izin untuk menulis data ke Google Drive. Secara teknis, kita tidak menggunakan akun email pribadi kita secara langsung di dalam kode (karena tidak aman), melainkan menggunakan **Service Account** (Akun Layanan). Anggap saja ini adalah "robot" yang kita beri kunci khusus untuk mengakses Google Sheet kita.
+
+### 1. Siapkan Google Sheet
+
+Buatlah sebuah Google Sheet baru dan beri nama, misalnya `BMI_History`. Di baris pertama (Header), buatlah kolom-kolom berikut:
+
+- **Nama**
+- **Gender**
+- **Berat**
+- **Tinggi**
+- **BMI**
+- **Kategori**
+- **Tanggal**
+
+### 2. Dapatkan Kunci dari Google Cloud Console ☁️
+
+Ini adalah bagian "administratif" untuk mendapatkan file rahasia (JSON) yang berisi kunci akses. Langkah ringkasnya:
+
+1. Buka [Google Cloud Console](https://console.cloud.google.com/).
+2. Buat **Project baru**.
+3. Cari dan aktifkan (**Enable**) dua API ini: `Google Sheets API` dan `Google Drive API`.
+4. Masuk ke menu **Credentials** > **Create Credentials** > **Service Account**.
+5. Setelah akun dibuat, masuk ke tab **Keys** > **Add Key** > **Create New Key** > pilih **JSON**.
+6. File JSON akan terunduh otomatis ke komputermu. **Simpan baik-baik file ini.**
+
+### 3. Bagikan Akses (Share) 🔑
+
+Buka file JSON tadi, cari bagian `"client_email"`. Salin alamat email unik tersebut (biasanya berakhiran `@project-id.iam.gserviceaccount.com`), lalu **Share** Google Sheet yang kamu buat tadi ke alamat email tersebut dengan akses sebagai **Editor**.
+
+---
+
+Apakah kamu sudah memiliki file JSON tersebut di komputermu, atau ada bagian dari langkah Google Cloud di atas yang ingin kita bahas lebih detail? 🛠️

@@ -1,28 +1,69 @@
 """Sidebar components for user input."""
+import streamlit as st
+from typing import Tuple
 
 
-def render_sidebar():
-    """Render sidebar input components and return user data."""
-    import streamlit as st
-    st.sidebar.title("Silahkan isi data berikut")
+# Konstanta
+NAMA_PLACEHOLDER = "Masukkan nama Anda"
+BERAT_DEFAULT = 60.0
+TINGGI_DEFAULT = 165.0
 
-    nama = st.sidebar.text_input("Nama:", placeholder="Masukkan nama Anda")
-    jenis_kelamin = st.sidebar.radio("Jenis Kelamin:", ["Laki-laki", "Perempuan"])
 
-    # Memberikan nilai default (value) yang logis agar aplikasi tidak langsung menghitung angka 1.0
-    berat = st.sidebar.number_input("Masukkan Berat Badan (kg)",
-                                    min_value=1.0, value=60.0, step=0.1)
-    tinggi = st.sidebar.number_input("Masukkan Tinggi Badan (cm)",
-                                    min_value=1.0, value=165.0, step=0.1)
+def render_sidebar() -> Tuple[str, str, float, float, bool]:
+    """
+    Render komponen input di sidebar dan kembalikan data pengguna.
 
-    # Menambahkan type="primary" agar tombol utama terlihat lebih menonjol
+    Returns:
+        Tuple berisi: (nama, jenis_kelamin, berat, tinggi, tombol_hitung)
+    """
+    st.sidebar.title("Silakan isi data berikut")
+
+    # Handle reset form
+    if st.session_state.get('reset_form', False):
+        nama_value = ""
+    else:
+        nama_value = st.session_state.get('nama_input', "")
+
+    # Input nama
+    nama = st.sidebar.text_input(
+        "Nama:",
+        value=nama_value,
+        placeholder=NAMA_PLACEHOLDER,
+        key="nama_input"
+    )
+
+    # Input jenis kelamin
+    jenis_kelamin = st.sidebar.radio(
+        "Jenis Kelamin:",
+        ["Laki-laki", "Perempuan"]
+    )
+
+    # Input berat badan dengan nilai default yang logis
+    berat = st.sidebar.number_input(
+        "Masukkan Berat Badan (kg)",
+        min_value=1.0,
+        value=BERAT_DEFAULT,
+        step=0.1
+    )
+
+    # Input tinggi badan
+    tinggi = st.sidebar.number_input(
+        "Masukkan Tinggi Badan (cm)",
+        min_value=1.0,
+        value=TINGGI_DEFAULT,
+        step=1.0
+    )
+
+    # Tombol Hitung BMI
     tombol_hitung = st.sidebar.button("Hitung BMI", type="primary")
 
+    # Info tentang BMI
     st.sidebar.divider()
     st.sidebar.markdown("""
     ### Tentang BMI 💡
-    **Body Mass Index (BMI)** adalah cara sederhana untuk memantau status gizi orang dewasa. 
-    
-    *   **Penting:** Skor ini tidak memperhitungkan masa otot, kepadatan tulang, dan komposisi tubuh secara keseluruhan.
+    **Body Mass Index (BMI)** adalah cara sederhana untuk memantau status gizi orang dewasa.
+
+    *   **Penting:** Skor ini tidak memperhitungkan massa otot, kepadatan tulang, dan komposisi tubuh secara keseluruhan.
     """)
+
     return nama, jenis_kelamin, berat, tinggi, tombol_hitung
