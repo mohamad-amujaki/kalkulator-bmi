@@ -190,3 +190,25 @@ if st.button("Hitung BMI Sekarang"):
 - st.divider(): Membuat garis horizontal untuk merapikan tampilan teks. ➖
 
 Sekarang aplikasi kita sudah memiliki alur yang lengkap: Input -> Proses (saat tombol diklik) -> Output (lewat popup).
+
+## Merubah Tampilan agar lebih rapi dengan column
+
+```python
+# Membuat 2 Column agar lebih rapi
+col_nama, col_gender = st.columns(2)
+with col_nama:
+    # Membuat input nama pengguna
+    nama = st.text_input("Masukkan Nama Anda")
+with col_gender:
+    # Membuat input jenis kelamin (menggunakan st.selectbox atau st.radio)
+    jenis_kelamin = st.selectbox("Pilih Jenis Kelamin", ["Laki-laki", "Perempuan"])
+
+# Membuat 2 Column agar lehi rapi
+col_berat, col_tinggi = st.columns(2)
+with col_berat:
+    # Membuat input angka untuk berat badan
+    berat = st.number_input("Masukkan Berat Badan (kg)", min_value=1.0, step=0.1)
+with col_tinggi:
+    # Membuat input angka untuk tinggi badan
+    tinggi = st.number_input("Masukkan Tinggi Badan (cm)", min_value=1.0, step=0.1)
+```
