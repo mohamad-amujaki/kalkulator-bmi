@@ -146,3 +146,47 @@ Penjelasan Kode:
 - elif (else if): Digunakan untuk memeriksa kondisi berikutnya jika kondisi sebelumnya salah. Kita bisa menggunakan elif sebanyak yang dibutuhkan.
 - else: Pilihan terakhir jika tidak ada satupun kondisi di atas yang terpenuhi (dalam hal ini, jika BMI 30 atau lebih).
 - st.warning / st.success / st.error: Ini adalah cara Streamlit menampilkan pesan dengan warna yang berbeda (kuning, hijau, dan merah) agar tampilan aplikasi lebih informatif.
+
+## Buat hasil perhitungan lebioh informatif dengan popup dialog
+
+Untuk membuat popup, kita akan menggunakan fitur bernama @st.dialog. Ini adalah "dekorator" yang mengubah sebuah fungsi menjadi jendela munculan (modal).
+
+Berikut adalah cara menyusun kodenya:
+
+```python
+# 1. Kita siapkan fungsi untuk popup-nya
+@st.dialog("Hasil Perhitungan BMI")
+def tunjukkan_hasil(n, jk, nilai, kat):
+    st.write(f"Halo, **{n}**! 👋")
+    st.write(f"Jenis Kelamin: {jk}")
+    st.divider() # Garis pemisah
+    st.metric(label="BMI Anda", value=f"{nilai:.2f}")
+    st.info(f"Kategori: **{kat}**")
+
+# 2. Membuat tombol untuk memicu perhitungan
+if st.button("Hitung BMI Sekarang"):
+    # (Logika perhitungan kita yang sebelumnya diletakkan di sini)
+    tinggi_m = tinggi / 100
+    bmi = berat / (tinggi_m ** 2)
+
+    # Menentukan kategori
+    if bmi < 18.5:
+        kategori = "Berat Badan Kurang"
+    elif 18.5 <= bmi <= 24.9:
+        kategori = "Normal"
+    elif 25.0 <= bmi <= 29.9:
+        kategori = "Overweight"
+    else:
+        kategori = "Obesitas"
+
+    # 3. Memanggil fungsi popup
+    tunjukkan_hasil(nama, jenis_kelamin, bmi, kategori)
+```
+
+### Penjelasan Komponen Baru
+
+- @st.dialog("Judul"): Menandakan bahwa fungsi di bawahnya akan muncul sebagai jendela di tengah layar.
+- st.metric(): Menampilkan angka dengan format yang lebih menonjol dan profesional.
+- st.divider(): Membuat garis horizontal untuk merapikan tampilan teks. ➖
+
+Sekarang aplikasi kita sudah memiliki alur yang lengkap: Input -> Proses (saat tombol diklik) -> Output (lewat popup).
