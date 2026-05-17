@@ -16,25 +16,31 @@ berat = st.number_input("Masukkan Berat Badan (kg)", min_value=1.0, step=0.1)
 # Membuat input angka untuk tinggi badan
 tinggi = st.number_input("Masukkan Tinggi Badan (cm)", min_value=1.0, step=0.1)
 
-# Konversi Tinggi ke dalam Meter
-tinggi_m = tinggi / 100
+# Siapkan fungsi untuk popup dialog yang menampilkan perhitungan BMI
+@st.dialog("Perhitungan BMI")
+def tunjukkan_hasil_perhitungan_bmi(nama_pengguna, gender, nilai_bmi, kategori_bmi):
+    """Fungsi untuk menampilkan perhitungan BMI"""
+    st.write(f"Halo {nama_pengguna}")
+    st.write(f"Jenis Kelamin: {gender}")
+    st.divider()
+    st.metric(label="Nilai BMI: ", value=f"{nilai_bmi:.2f}")
+    st.info(f"Kategori BMI: **{kategori_bmi}**")
 
-# Menghitung BMI
-bmi = berat / (tinggi_m ** 2)
+# Membuat Tombol untuk memicu Perhitungan BMI
+if st.button("Hitung BMI"):
+    # (Logika perhitungan kita yang sebelumnya diletakkan di sini)
+    # Konversi Tinggi ke dalam Meter
+    tinggi_m = tinggi / 100
 
-# Tampilkan perhitungan BMI jika nama telah terisi minimal 3 huruf
-if len(nama) >= 3:
-    # Menampilkan hasil perhitungan BMI ke layar
-    st.success(f"BMI Anda adalah: {bmi:.2f}")
+    # Menghitung BMI
+    bmi = berat / (tinggi_m ** 2)
     if bmi < 18.5:
         KATEGORI = "Berat Badan Kurang (Underweight)"
-        st.warning(f"Predikat BMI Sdr. {nama} saat ini {KATEGORI}")
     elif 18.5 <= bmi < 24.9:
         KATEGORI = "Berat Badan Ideal (Normal)"
-        st.success(f"Predikat BMI Sdr. {nama} saat ini {KATEGORI}")
     elif 25 <= bmi < 29.9:
         KATEGORI = "Berat Badan Berlebih (Overweight)"
-        st.warning(f"Predikat BMI Sdr. {nama} saat ini {KATEGORI}")
     else:
         KATEGORI = "Obesitas"
-        st.error(f"Predikat BMI Sdr. {nama} saat ini {KATEGORI}")
+    # Memanggil fungsi popup
+    tunjukkan_hasil_perhitungan_bmi(nama, jenis_kelamin, bmi, KATEGORI)
