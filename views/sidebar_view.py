@@ -31,12 +31,16 @@ class SidebarView:
         """
         st.sidebar.title("Silakan isi data berikut")
 
-        # Handle reset form
-        if st.session_state.get('reset_form', False):
-            SidebarView._reset_form_state()
+        # Cek apakah form perlu di-reset SEBELUM render komponen apapun
+        should_reset = st.session_state.get('reset_form', False)
+        if should_reset:
+            # Hapus nilai input dari session state widget SEBELUM render
+            if 'nama_input' in st.session_state:
+                del st.session_state['nama_input']
+            st.session_state.reset_form = False
 
-        # Input nama
-        nama = SidebarView._render_nama_input()
+        # Input nama (cek reset lagi di dalam fungsi)
+        nama = SidebarView._render_nama_input(should_reset)
 
         # Input jenis kelamin
         jenis_kelamin = SidebarView._render_gender_input()
@@ -59,8 +63,20 @@ class SidebarView:
         st.session_state.reset_form = False
 
     @staticmethod
-    def _render_nama_input() -> str:
+    def _render_nama_input(should_reset: bool = False) -> str:
         """Render input nama."""
+        # Jika reset_form True, kosongkan input
+        if should_reset:
+            st.session_state['nama_input'] = ""
+            # Render dengan value kosong
+            result = st.sidebar.text_input(
+                "Nama:",
+                value="",
+                placeholder=SidebarView.NAMA_PLACEHOLDER,
+                key="nama_input"
+            )
+            return result if result is not None else ""
+
         nama_value = st.session_state.get('nama_input', "")
         result = st.sidebar.text_input(
             "Nama:",
