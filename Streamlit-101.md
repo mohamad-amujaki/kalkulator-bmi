@@ -212,3 +212,19 @@ with col_tinggi:
     # Membuat input angka untuk tinggi badan
     tinggi = st.number_input("Masukkan Tinggi Badan (cm)", min_value=1.0, step=0.1)
 ```
+
+## Tambah Sidebar
+
+Menggunakan sidebar adalah cara efektif untuk memisahkan antara input/konfigurasi dengan hasil/konten utama. Di Streamlit, kita bisa memindahkan hampir semua elemen ke samping hanya dengan menambahkan kata .sidebar setelah st. 🧭
+
+Bagaimana Sidebar Bekerja?
+Bayangkan halaman web kita memiliki dua area:
+
+- Main Area: Tempat untuk judul besar, grafik, atau hasil (seperti popup kita).
+- Sidebar: Area di sebelah kiri untuk kontrol atau input data.
+
+Jika sebelumnya kita menulis:
+nama = st.text_input("Masukkan nama Anda:")
+
+Maka untuk memindahkannya ke samping kiri, kodenya menjadi:
+nama = st.sidebar.text_input("Masukkan nama Anda:")

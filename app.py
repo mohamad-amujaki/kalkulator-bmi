@@ -2,37 +2,21 @@
 import streamlit as st
 
 # Menampilkan judul aplikasi
-st.title("Kalkulator BMI Interaktif")
-
-# Membuat 2 Column agar lebih rapi
-col_nama, col_gender = st.columns(2)
-with col_nama:
-    # Membuat input nama pengguna
-    nama = st.text_input("Masukkan Nama Anda")
-with col_gender:
-    # Membuat input jenis kelamin (menggunakan st.selectbox atau st.radio)
-    jenis_kelamin = st.selectbox("Pilih Jenis Kelamin", ["Laki-laki", "Perempuan"])
-
-# Membuat 2 Column agar lehi rapi
-col_berat, col_tinggi = st.columns(2)
-with col_berat:
-    # Membuat input angka untuk berat badan
-    berat = st.number_input("Masukkan Berat Badan (kg)", min_value=1.0, step=0.1)
-with col_tinggi:
-    # Membuat input angka untuk tinggi badan
-    tinggi = st.number_input("Masukkan Tinggi Badan (cm)", min_value=1.0, step=0.1)
+st.sidebar.title("Silahkan isi data berikut")
+nama = st.sidebar.text_input("Nama:")
+jenis_kelamin = st.sidebar.radio("Jenis Kelamin:", ["Laki-laki", "Perempuan"])
+berat = st.sidebar.number_input("Masukkan Berat Badan (kg)", min_value=1.0, step=0.1)
+tinggi = st.sidebar.number_input("Masukkan Tinggi Badan (cm)", min_value=1.0, step=0.1)
 
 # Siapkan fungsi untuk popup dialog yang menampilkan perhitungan BMI
-@st.dialog("Perhitungan BMI")
 def tunjukkan_hasil_perhitungan_bmi(nama_pengguna, gender, nilai_bmi, kategori_bmi, saran_bmi):
     """Fungsi untuk menampilkan perhitungan BMI"""
     st.write(f"Halo {nama_pengguna}")
     st.write(f"Jenis Kelamin: {gender}")
     st.divider()
     st.metric(label="Nilai BMI: ", value=f"{nilai_bmi:.2f}")
-    st.info(f"Kategori BMI: **{kategori_bmi}** \n Saran: {saran_bmi}")
-
-if st.button("Hitung BMI"):
+    st.info(f"Kategori BMI: **{kategori_bmi}** \n\n**Saran**: {saran_bmi}")
+if st.sidebar.button("Hitung BMI"):
     # (Logika perhitungan kita yang sebelumnya diletakkan di sini)
     if len(nama) < 3:
         st.error("Nama minimal terdiri dari 3 karakter")
@@ -56,3 +40,19 @@ if st.button("Hitung BMI"):
             SARAN = "Disarankan berkonsultasi dengan tenaga medis."
         # Memanggil fungsi popup
         tunjukkan_hasil_perhitungan_bmi(nama, jenis_kelamin, bmi, KATEGORI, SARAN)
+
+# Menambahkan garis pembatas agar tampilan lebih teratur
+st.sidebar.divider()
+
+# Menampilkan informasi tambahan
+st.sidebar.markdown("""
+### Tentang BMI 💡
+**Body Mass Index (BMI)** adalah cara sederhana untuk memantau status gizi orang dewasa. 
+
+*   **Penting:** Skor ini tidak memperhitungkan massa otot, kepadatan tulang, dan komposisi tubuh secara keseluruhan.
+""")
+
+st.markdown("""
+### Selamat Datang!
+Silakan isi data diri pada **panel di sebelah kiri** untuk mengetahui skor BMI dan kategori kesehatan Anda.
+""")
