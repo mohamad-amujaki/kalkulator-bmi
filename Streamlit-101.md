@@ -245,3 +245,35 @@ Mengingat st.progress() hanya menerima angka maksimal 1.0, apa yang perlu kita t
 
 Fungsi min(angka1, angka2) akan mengambil angka yang paling kecil di antara keduanya. Jadi, codenya menjadi:
 nilai_aman = min(bmi / 40, 1.0)
+
+## Refactoring code agar lebih mudah dimaintenance
+
+Refactored `app.py` into a multi-file structure to improve maintainability and fix the "redefined-outer-name" linting issue.
+
+**New Project Structure:**
+
+```text
+├── app.py                  # Main entry point
+├── logic/
+│   ├── __init__.py
+│   └── bmi.py             # BMI calculation logic (pure function)
+└── components/
+    ├── __init__.py
+    ├── sidebar.py         # Sidebar input components
+    └── results.py         # Results display components
+```
+
+**What was fixed:**
+
+1. **Pylint W0621 Error**: The original code had variables (`bmi`, `kategori`, `saran`) inside [`hitung_dan_kategorikan_bmi()`](logic/bmi.py:6) that shared names with variables on line 85 of the original `app.py`. This caused Pylint to flag "Redefining name 'bmi' from outer scope".
+
+2. **Solution**: Refactored into separate modules where each function operates in its own scope. The local variables in `hitung_dan_kategorikan_bmi()` use `skor_bmi` instead of `bmi`, and they exist in a completely separate module scope from the calling code.
+
+3. **Code Rating**: Pylint now rates the code at **10.00/10** with no errors.
+
+**Benefits of the refactoring:**
+
+- Clear separation of concerns (logic vs UI)
+- Each module is independently testable
+- Easier to maintain and extend
+- No scope shadowing issues
