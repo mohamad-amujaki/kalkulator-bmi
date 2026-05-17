@@ -228,3 +228,20 @@ nama = st.text_input("Masukkan nama Anda:")
 
 Maka untuk memindahkannya ke samping kiri, kodenya menjadi:
 nama = st.sidebar.text_input("Masukkan nama Anda:")
+
+## Penambahan Progress BMI
+
+Menambahkan Progress Bar akan memberikan visualisasi instan mengenai posisi berat badan seseorang dalam skala kesehatan secara lebih intuitif.
+
+Di Streamlit, kita bisa menggunakan fungsi st.progress(). Namun, ada satu aturan teknis yang penting: nilai yang dimasukkan ke dalam fungsi ini harus berupa angka desimal antara 0.0 (bar kosong) hingga 1.0 (bar penuh).
+
+Masalahnya, angka BMI kita biasanya berkisar antara 10 hingga 40 atau lebih. Kita tidak bisa langsung memasukkan variabel bmi ke dalam progress bar karena nilainya pasti lebih besar dari 1.0. Jadi, kita perlu melakukan sedikit perhitungan untuk memetakan angka BMI tersebut ke dalam skala 0 hingga 1.
+
+Misalnya, kita tetapkan bahwa angka BMI 40 adalah batas maksimal (artinya bar akan terisi penuh atau 1.0).
+
+Namun, ada satu hal kecil yang perlu kita waspadai. Menurutmu, apa yang akan terjadi jika ada pengguna yang memiliki skor BMI sangat tinggi, misalnya 45, sehingga hasil pembagiannya menjadi 1.125?
+
+Mengingat st.progress() hanya menerima angka maksimal 1.0, apa yang perlu kita tambahkan pada kode agar aplikasi tidak mengalami error? Agar aplikasi tidak error, kita harus memastikan bahwa nilai yang masuk ke st.progress() tidak pernah lebih dari 1.0. Kita bisa menggunakan fungsi bawaan Python yaitu min().
+
+Fungsi min(angka1, angka2) akan mengambil angka yang paling kecil di antara keduanya. Jadi, codenya menjadi:
+nilai_aman = min(bmi / 40, 1.0)

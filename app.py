@@ -38,8 +38,12 @@ if st.sidebar.button("Hitung BMI"):
         else:
             KATEGORI = "Obesitas"
             SARAN = "Disarankan berkonsultasi dengan tenaga medis."
-        # Memanggil fungsi popup
+        # Memanggil fungsi
         tunjukkan_hasil_perhitungan_bmi(nama, jenis_kelamin, bmi, KATEGORI, SARAN)
+        # Tampilkan juga progress BMI
+        progress_bmi = min(bmi / 40, 1.0)
+        st.write("Posisi BMI Anda dalam skala umum:")
+        st.progress(progress_bmi)
 
 # Menambahkan garis pembatas agar tampilan lebih teratur
 st.sidebar.divider()
